@@ -6,11 +6,15 @@ module ForestLiana::Collection
     attr_accessor :collection_name
     attr_accessor :is_read_only
     attr_accessor :is_searchable
+    attr_accessor :search_extended_by_default
+    attr_accessor :case_sensitive_search
 
     def collection(collection_name, opts = {})
       self.collection_name = find_name(collection_name).to_s
       self.is_read_only = opts[:read_only] || false
       self.is_searchable = opts[:is_searchable] || false
+      self.search_extended_by_default = opts[:search_extended_by_default] || false
+      self.case_sensitive_search = opts[:case_sensitive_search] || false
 
       # NOTICE: Creates dynamically the serializer if it's a Smart Collection.
       if smart_collection? &&

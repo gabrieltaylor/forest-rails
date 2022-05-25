@@ -7,6 +7,7 @@ class ForestLiana::Model::Collection
   attr_accessor :name, :fields, :actions, :segments, :only_for_relationships,
     :is_virtual, :is_read_only, :is_searchable, :icon,
     :integration, :pagination_type, :search_fields,
+    :case_sensitive_search, :search_extended_by_default,
     # TODO: Remove once lianas prior to 2.0.0 are not supported anymore.
     :name_old
 
@@ -27,6 +28,8 @@ class ForestLiana::Model::Collection
     @only_for_relationships ||= false
     @pagination_type ||= "page"
     @search_fields ||= nil
+    @case_sensitive_search ||= false
+    @search_extended_by_default ||= false
     @fields ||= []
     @actions ||= []
     @segments ||= []

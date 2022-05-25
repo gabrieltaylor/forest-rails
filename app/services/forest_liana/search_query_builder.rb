@@ -81,7 +81,11 @@ module ForestLiana
             conditions << "#{column_name} =
               #{@resource.defined_enums[column.name][@search.downcase]}"
           elsif !(column.respond_to?(:array) && column.array) && text_type?(column.type)
-            conditions << "LOWER(#{column_name}) LIKE :search_value_for_string"
+            if @collection.case_sensitive_search
+              conditions << "#{column_name} LIKE :search_value_for_string"
+            else
+              conditions << "LOWER(#{column_name}) LIKE :search_value_for_string"
+            end
           end
         end
 
@@ -94,7 +98,7 @@ module ForestLiana
           end
         end
 
-        if (@params['searchExtended'].to_i == 1)
+        if (@params['searchExtended'].to_i == 1 || @collection.search_extended_by_default)
           ForestLiana::QueryHelper.get_one_association_names_symbol(@resource).each do |association|
             if @collection.search_fields
               association_search = @collection.search_fields.map do |field|
@@ -211,7 +215,11 @@ module ForestLiana
 
     def association_search_condition table_name, column_name
       column_name = format_column_name(table_name, column_name)
-      "LOWER(#{column_name}) LIKE :search_value_for_string"
+      if @collection.case_sensitive_search
+        "#{column_name} LIKE :search_value_for_string"
+      else
+        "LOWER(#{column_name}) LIKE :search_value_for_string"
+      end
     end
 
     def acts_as_taggable?(field)
