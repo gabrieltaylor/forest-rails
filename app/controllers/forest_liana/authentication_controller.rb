@@ -50,6 +50,7 @@ module ForestLiana
         render json: response_body, status: 200
 
       rescue => error
+        FOREST_LOGGER.error("Authentication Callback Error: #{error}\n#{format_stacktrace(error)}")
         render json: { errors: [{ status: error.try(:error_code) || 500, detail: error.try(:message) }] },
           status: error.try(:status) || :internal_server_error, serializer: nil
       end
